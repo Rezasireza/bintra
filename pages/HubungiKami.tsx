@@ -1,9 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import Section from '../components/ui/Section';
 import Button from '../components/ui/Button';
-import { MapPin, Phone, User, Send } from 'lucide-react';
+import { MapPin, Phone, User, Send, CheckCircle2, Loader2 } from 'lucide-react';
 
 const fadeInUp = {
     initial: { opacity: 0, y: 30 },
@@ -12,7 +12,62 @@ const fadeInUp = {
     transition: { duration: 0.6, ease: "easeOut" }
 };
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const HubungiKami: React.FC = () => {
+    const [nama, setNama] = useState('');
+    const [email, setEmail] = useState('');
+    const [pesan, setPesan] = useState('');
+    const [touched, setTouched] = useState({ nama: false, email: false, pesan: false });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+
+    const emailValid = emailRegex.test(email);
+    const isFormValid = nama.trim() !== '' && emailValid && pesan.trim() !== '';
+
+    const errors = {
+        nama: touched.nama && nama.trim() === '' ? 'Nama lengkap wajib diisi' : '',
+        email: touched.email && email.trim() === ''
+            ? 'Email wajib diisi'
+            : touched.email && !emailValid
+                ? 'Format email tidak valid'
+                : '',
+        pesan: touched.pesan && pesan.trim() === '' ? 'Pesan wajib diisi' : '',
+    };
+
+    const handleBlur = (field: 'nama' | 'email' | 'pesan') => {
+        setTouched((prev) => ({ ...prev, [field]: true }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setTouched({ nama: true, email: true, pesan: true });
+        if (!isFormValid) return;
+
+        setIsSubmitting(true);
+        // Simulate sending (replace with actual API call if needed)
+        await new Promise((res) => setTimeout(res, 1800));
+        setIsSubmitting(false);
+        setIsSuccess(true);
+        setNama(''); setEmail(''); setPesan('');
+        setTouched({ nama: false, email: false, pesan: false });
+    };
+
+    const InputError = ({ msg }: { msg: string }) => (
+        <AnimatePresence>
+            {msg && (
+                <motion.p
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    className="text-red-500 text-xs mt-1.5 font-medium"
+                >
+                    {msg}
+                </motion.p>
+            )}
+        </AnimatePresence>
+    );
+
     return (
         <>
             <Helmet>
@@ -20,6 +75,7 @@ const HubungiKami: React.FC = () => {
             </Helmet>
 
             <div className="pt-20">
+                {/* Hero Header */}
                 <div className="relative overflow-hidden bg-gradient-to-b from-white to-[#fdf7e8] border-b border-gray-100">
                     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                         <motion.div
@@ -108,25 +164,97 @@ const HubungiKami: React.FC = () => {
 
                         {/* Form Side */}
                         <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="bg-white rounded-[2rem] p-8 md:p-12 shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-gray-100">
-                            <h2 className="text-2xl font-bold text-primary-DEFAULT mb-6">Tinggalkan Pesan</h2>
-                            <form className="space-y-6">
+                            <h2 className="text-2xl font-bold text-primary-DEFAULT mb-6 text-center">Tinggalkan Pesan</h2>
+
+                            {/* Success banner */}
+                            <AnimatePresence>
+                                {isSuccess && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="flex items-center gap-3 p-4 mb-6 bg-green-50 border border-green-200 rounded-xl"
+                                    >
+                                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
+                                        <p className="text-green-700 font-semibold text-sm">Pesan berhasil dikirim. Kami akan segera menghubungi Anda!</p>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            <form className="space-y-6" onSubmit={handleSubmit} noValidate>
                                 <div className="grid md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-primary-DEFAULT">Nama Lengkap</label>
-                                        <input type="text" className="w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border border-gray-200 focus:border-gold-500 focus:ring-1 outline-none transition-all" placeholder="Nama Anda" />
+                                    {/* Nama */}
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-semibold text-primary-DEFAULT">
+                                            Nama Lengkap <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={nama}
+                                            onChange={(e) => setNama(e.target.value)}
+                                            onBlur={() => handleBlur('nama')}
+                                            className={`w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border transition-all outline-none
+                                                ${errors.nama ? 'border-red-400 focus:ring-1 focus:ring-red-300' : 'border-gray-200 focus:border-gold-500 focus:ring-1 focus:ring-gold-200'}`}
+                                            placeholder="Nama Anda"
+                                        />
+                                        <InputError msg={errors.nama} />
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-primary-DEFAULT">Email</label>
-                                        <input type="email" className="w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border border-gray-200 focus:border-gold-500 focus:ring-1 outline-none transition-all" placeholder="email@anda.com" />
+
+                                    {/* Email */}
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-semibold text-primary-DEFAULT">
+                                            Email <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            onBlur={() => handleBlur('email')}
+                                            className={`w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border transition-all outline-none
+                                                ${errors.email ? 'border-red-400 focus:ring-1 focus:ring-red-300' : 'border-gray-200 focus:border-gold-500 focus:ring-1 focus:ring-gold-200'}`}
+                                            placeholder="email@anda.com"
+                                        />
+                                        <InputError msg={errors.email} />
                                     </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-primary-DEFAULT">Pesan / Pertanyaan</label>
-                                    <textarea rows={6} className="w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border border-gray-200 focus:border-gold-500 focus:ring-1 outline-none resize-none transition-all" placeholder="Tuliskan masalah atau pertanyaan yang ingin disampaikan..."></textarea>
+
+                                {/* Pesan */}
+                                <div className="space-y-1">
+                                    <label className="text-sm font-semibold text-primary-DEFAULT">
+                                        Pesan / Pertanyaan <span className="text-red-500">*</span>
+                                    </label>
+                                    <textarea
+                                        rows={6}
+                                        value={pesan}
+                                        onChange={(e) => setPesan(e.target.value)}
+                                        onBlur={() => handleBlur('pesan')}
+                                        className={`w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border transition-all outline-none resize-none
+                                            ${errors.pesan ? 'border-red-400 focus:ring-1 focus:ring-red-300' : 'border-gray-200 focus:border-gold-500 focus:ring-1 focus:ring-gold-200'}`}
+                                        placeholder="Tuliskan masalah atau pertanyaan yang ingin disampaikan..."
+                                    />
+                                    <InputError msg={errors.pesan} />
                                 </div>
-                                <Button fullWidth className="gap-2 h-14 text-base mt-2 shadow-lg shadow-gold-500/20">
-                                    <Send size={18} /> Kirim Pesan Sekarang
-                                </Button>
+
+                                {/* Submit */}
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting || !isFormValid}
+                                    className={`w-full flex items-center justify-center gap-2 h-14 text-base font-semibold rounded-xl shadow-lg transition-all duration-200
+                                        ${isFormValid && !isSubmitting
+                                            ? 'bg-gold-500 hover:bg-gold-600 text-white shadow-gold-500/20 cursor-pointer'
+                                            : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-60 shadow-none'
+                                        }`}
+                                >
+                                    {isSubmitting ? (
+                                        <><Loader2 size={18} className="animate-spin" /> Mengirim...</>
+                                    ) : (
+                                        <><Send size={18} /> Kirim Pesan Sekarang</>
+                                    )}
+                                </button>
+
+                                <p className="text-center text-xs text-gray-400">
+                                    Field bertanda <span className="text-red-500 font-bold">*</span> wajib diisi
+                                </p>
                             </form>
                         </motion.div>
 
