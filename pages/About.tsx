@@ -259,7 +259,6 @@ const About: React.FC = () => {
             className="bg-gradient-to-b from-[#fdf7e8] to-[#fffaf1] p-10 md:p-14 rounded-[2.5rem] text-center space-y-6 relative overflow-hidden"
           >
             <ShineBorder shineColor={["#D4AF37", "#C8A24A", "#A08035"]} borderWidth={2} />
-            <div className="absolute inset-0 border border-gold-200/40 rounded-[2.5rem] pointer-events-none z-10"></div>
             <div className="absolute -right-20 -top-20 w-64 h-64 bg-white/60 rounded-full blur-3xl pointer-events-none" />
             <h2 className="text-3xl md:text-4xl font-bold text-primary-DEFAULT relative z-10">Komitmen Pembelajaran Digital</h2>
             <p className="text-lg md:text-xl text-primary-secondary max-w-3xl mx-auto leading-relaxed relative z-10">
