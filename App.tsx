@@ -7,7 +7,9 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import About from './pages/About';
-import Contact from './pages/Contact';
+import HubungiKami from './pages/HubungiKami';
+import InformasiPPDB from './pages/InformasiPPDB';
+import Beasiswa from './pages/Beasiswa';
 import ArticleDetail from './pages/ArticleDetail';
 import PlaceholderPage from './pages/PlaceholderPage';
 
@@ -58,14 +60,15 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<MainLayout><Home /></MainLayout>} />
           <Route path="/about" element={<MainLayout><About /></MainLayout>} />
-          <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
+          <Route path="/hubungi-kami" element={<MainLayout><HubungiKami /></MainLayout>} />
+          <Route path="/informasi-ppdb" element={<MainLayout><InformasiPPDB /></MainLayout>} />
+          <Route path="/beasiswa" element={<MainLayout><Beasiswa /></MainLayout>} />
+
           {/* Article Routes */}
           <Route path="/artikel/:slug" element={<MainLayout><ArticleDetail /></MainLayout>} />
 
           {/* Placeholder Routes */}
           <Route path="/portal" element={<PlaceholderPage />} />
-          <Route path="/informasi-pendaftaran" element={<PlaceholderPage />} />
-          <Route path="/beasiswa" element={<PlaceholderPage />} />
 
           {/* Auth & Public forms */}
           <Route path="/login" element={<Login />} />
