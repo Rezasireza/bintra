@@ -321,24 +321,30 @@ const Home: React.FC = () => {
 
           {/* Visuals */}
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="relative h-[600px] hidden lg:block z-10">
-            <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full relative p-4">
+            <div className="grid grid-cols-3 grid-rows-2 gap-4 h-full relative p-4">
               <div className="absolute top-10 right-10 w-24 h-24 bg-cream-100 rounded-full blur-2xl opacity-60 z-0" />
               <div className="absolute bottom-20 left-10 w-32 h-32 bg-gold-400/10 rounded-full blur-3xl z-0" />
               {heroCards.length > 0 ? (
                 heroCards.map((card, idx) => {
-                  let cls = '';
-                  if (idx === 0) cls = "mt-12 transform translate-y-8";
-                  else if (idx === 1) cls = "mb-8 transform -translate-y-4";
-                  else if (idx === 2) cls = "transform translate-x-4";
-                  else if (idx === 3) cls = "mt-8 transform -translate-x-4";
-                  return <ImageCard key={card.id || idx} src={card.image_public_url || card.image_path} alt={card.title} className={cls} />
+                  const offsetClasses = [
+                    "mt-12 transform translate-y-8",
+                    "mb-4 transform -translate-y-2",
+                    "mt-6 transform translate-y-4",
+                    "mt-8 transform -translate-x-2",
+                    "mb-8 transform translate-x-2",
+                    "mt-4 transform -translate-y-4",
+                  ];
+                  const cls = offsetClasses[idx] || '';
+                  return <ImageCard key={card.id || idx} src={card.image_public_url || card.image_path} alt={card.title} className={cls} />;
                 })
               ) : (
                 <>
                   <ImageCard src="/images/student-certificate.jpg" alt="Prestasi Siswa" className="mt-12 transform translate-y-8" />
-                  <ImageCard src="/images/dance-1.jpg" alt="Seni Tari" className="mb-8 transform -translate-y-4" />
-                  <ImageCard src="/images/teachers.jpg" alt="Guru & Staff" className="transform translate-x-4" />
-                  <ImageCard src="/images/kumpul.jpg" alt="Ekstrakurikuler" className="mt-8 transform -translate-x-4" />
+                  <ImageCard src="/images/dance-1.jpg" alt="Seni Tari" className="mb-4 transform -translate-y-2" />
+                  <ImageCard src="/images/teachers.jpg" alt="Guru & Staff" className="mt-6 transform translate-y-4" />
+                  <ImageCard src="/images/kumpul.jpg" alt="Ekstrakurikuler" className="mt-8 transform -translate-x-2" />
+                  <ImageCard src="/images/dance-1.jpg" alt="Seni & Budaya" className="mb-8 transform translate-x-2" />
+                  <ImageCard src="/images/student-certificate.jpg" alt="Prestasi Akademik" className="mt-4 transform -translate-y-4" />
                 </>
               )}
             </div>

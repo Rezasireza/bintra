@@ -297,7 +297,7 @@ export const LandingSettingsEditor = () => {
 
             {activeTab === 'Kartu Hero' && (
                 <div className="bg-white p-6 border rounded-xl shadow-sm space-y-6">
-                    <p className="text-sm text-gray-500">Kelola 4 gambar yang muncul di sisi kanan bagian hero.</p>
+                    <p className="text-sm text-gray-500">Kelola hingga 6 gambar yang muncul di sisi kanan bagian hero.</p>
                     <div className="grid md:grid-cols-2 gap-6">
                         {heroCards.map((card, idx) => (
                             <div key={card.id || idx} className="border border-gray-200 p-4 rounded-xl flex gap-4 bg-gray-50 items-center">
@@ -323,7 +323,7 @@ export const LandingSettingsEditor = () => {
                             </div>
                         ))}
                     </div>
-                    {heroCards.length < 4 && (
+                    {heroCards.length < 6 && (
                         <button onClick={() => setHeroCards([...heroCards, { id: `new_${Date.now()}`, title: 'Kartu Baru', ratio: '4:5', order: heroCards.length + 1 }])} className="px-4 py-2 border-2 border-dashed rounded-xl w-full hover:bg-gray-50 flex justify-center items-center gap-2 text-gray-500">
                             <Plus size={18} /> Tambah Slot Kartu Hero
                         </button>
