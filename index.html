@@ -41,6 +41,16 @@
               '2xl': '16px',
               '3xl': '24px',
             },
+            animation: {
+              shine: 'shine var(--duration) infinite linear',
+            },
+            keyframes: {
+              shine: {
+                '0%': { backgroundPosition: '0% 0%' },
+                '50%': { backgroundPosition: '100% 100%' },
+                'to': { backgroundPosition: '0% 0%' },
+              },
+            },
             typography: (theme) => ({
               DEFAULT: {
                 css: {
