@@ -12,6 +12,7 @@ import InformasiPPDB from './pages/InformasiPPDB';
 import Beasiswa from './pages/Beasiswa';
 import ArticleDetail from './pages/ArticleDetail';
 import PlaceholderPage from './pages/PlaceholderPage';
+import PortalELearningComingSoon from './pages/PortalELearningComingSoon';
 
 // Admin Pages
 import { AdminGuard } from './src/admin/AdminGuard';
@@ -69,6 +70,7 @@ const App: React.FC = () => {
 
           {/* Placeholder Routes */}
           <Route path="/portal" element={<PlaceholderPage />} />
+          <Route path="/portal-e-learning-coming-soon" element={<PortalELearningComingSoon />} />
 
           {/* Auth & Public forms */}
           <Route path="/login" element={<Login />} />
