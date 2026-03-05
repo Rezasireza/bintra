@@ -97,6 +97,14 @@ const GalleryCarousel: React.FC<{ items: any[] }> = ({ items }) => {
   const goNext = () => setCurrentIndex((prev) => (prev + 1) % items.length);
   const goPrev = () => setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
 
+  useEffect(() => {
+    if (!items || items.length === 0) return;
+    const interval = setInterval(() => {
+      goNext();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [items]);
+
   if (!items || items.length === 0) return null;
 
   return (
@@ -383,7 +391,7 @@ const Home: React.FC = () => {
 
       {/* SECTION Biaya */}
       <Section className="bg-gray-50" id="biaya">
-        <motion.div {...fadeInUp} className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+        <motion.div {...fadeInUp} className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
           <div>
             <h2 className="text-3xl font-bold mb-3">Biaya Pendidikan</h2>
             <p className="text-primary-secondary">Transparan dan terjangkau.</p>
@@ -433,7 +441,7 @@ const Home: React.FC = () => {
 
       {/* SECTION Beasiswa */}
       <Section bg="cream" id="beasiswa">
-        <motion.div {...fadeInUp} className="mb-12">
+        <motion.div {...fadeInUp} className="mb-12 text-center md:text-left">
           <h2 className="text-3xl font-bold">Program Beasiswa</h2>
         </motion.div>
         <div className="grid md:grid-cols-2 gap-6">

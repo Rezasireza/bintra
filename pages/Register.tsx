@@ -79,10 +79,10 @@ const MAX_FILE_BYTES = 2 * 1024 * 1024; // 2 MB
 // ─── Helpers ────────────────────────────────────────────────────────────────────
 
 const inputCls =
-  'w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-primary-DEFAULT placeholder-gray-400 ' +
-  'focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none transition-all duration-200 text-sm';
+  'w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-[#1a2340] placeholder-gray-400 ' +
+  'focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 outline-none transition-all duration-200 text-[16px] min-h-[48px]';
 
-const labelCls = 'block text-xs font-semibold text-[#1a2340] mb-1.5 uppercase tracking-wide';
+const labelCls = 'block text-sm font-semibold text-[#1a2340] mb-1.5';
 
 const Field: React.FC<{
   label: string;
@@ -200,21 +200,24 @@ const StepIndicator: React.FC<{ current: number }> = ({ current }) => (
       const Icon = s.icon;
       return (
         <React.Fragment key={s.id}>
-          <div className="flex flex-col items-center gap-1.5 min-w-[70px]">
+          <div className="flex flex-col items-center gap-1.5 md:min-w-[80px] min-w-[60px]">
             <motion.div
               animate={active ? { scale: [1, 1.1, 1] } : {}}
               transition={{ duration: 0.4 }}
-              className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300
+              className={`w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300
                 ${done ? 'bg-green-500 text-white' : active ? 'bg-gold-500 text-white shadow-lg shadow-gold-500/30' : 'bg-gray-100 text-gray-400'}`}
             >
-              {done ? <CheckCircle2 size={16} /> : <Icon size={16} />}
+              {done ? <CheckCircle2 size={18} /> : <Icon size={18} />}
             </motion.div>
-            <span className={`text-[10px] font-semibold whitespace-nowrap text-center ${active ? 'text-gold-600' : done ? 'text-green-600' : 'text-gray-400'}`}>
+            <span className={`hidden md:block text-xs font-semibold whitespace-nowrap text-center ${active ? 'text-gold-600' : done ? 'text-green-600' : 'text-gray-400'}`}>
               {s.label}
+            </span>
+            <span className={`md:hidden text-[10px] font-semibold whitespace-nowrap text-center ${active ? 'text-gold-600' : done ? 'text-green-600' : 'text-gray-400'}`}>
+              Langkah {s.id}
             </span>
           </div>
           {i < STEPS.length - 1 && (
-            <div className={`flex-1 h-0.5 mt-[-18px] mx-1 transition-colors duration-500 ${done ? 'bg-green-400' : 'bg-gray-200'}`} />
+            <div className={`flex-1 h-0.5 mt-[-18px] md:mt-[-20px] mx-1 md:mx-2 transition-colors duration-500 ${done ? 'bg-green-400' : 'bg-gray-200'}`} />
           )}
         </React.Fragment>
       );
@@ -388,7 +391,7 @@ const Register: React.FC = () => {
 
       {/* RIGHT PANEL */}
       <div className="w-full lg:w-[65%] bg-white flex flex-col h-screen overflow-y-auto custom-scrollbar relative">
-        <div className="flex-1 flex flex-col py-10 px-6 sm:px-12 max-w-3xl mx-auto w-full">
+        <div className="flex-1 flex flex-col py-8 px-4 sm:px-5 md:px-8 max-w-xl mx-auto w-full pb-[env(safe-area-inset-bottom,2rem)] md:pb-12">
           <Link to="/" className="lg:hidden inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1a2340] mb-6 self-start"><ArrowLeft size={15} /> Beranda</Link>
           <div className="mb-6">
             <p className="text-gold-600 text-xs font-bold tracking-widest uppercase mb-1">Langkah {step} dari {STEPS.length}</p>
@@ -405,7 +408,7 @@ const Register: React.FC = () => {
                 {step === 1 && (
                   <>
                     <Field label="Nama Lengkap" required><input type="text" value={form.namaLengkap} onChange={set('namaLengkap')} className={inputCls} placeholder="Contoh: Budi Santoso" /></Field>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Field label="NIK (16 Digit)" required><input type="text" value={form.nik} onChange={set('nik')} className={inputCls} maxLength={16} placeholder="Sesuai KK" /></Field>
                       <Field label="NISN" required><input type="text" value={form.nisn} onChange={set('nisn')} className={inputCls} placeholder="Sesuai Dapodik" /></Field>
                       <Field label="Tempat Lahir" required><input type="text" value={form.tempatLahir} onChange={set('tempatLahir')} className={inputCls} placeholder="Kota/Kab" /></Field>
@@ -425,23 +428,23 @@ const Register: React.FC = () => {
                 {step === 2 && (
                   <>
                     <Field label="Alamat Lengkap Jalan / Perumahan" required><textarea rows={2} value={form.alamat} onChange={set('alamat')} className={`${inputCls} resize-none`} placeholder="Contoh: Jl. Merdeka No 10" /></Field>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                       <Field label="RT" required><input type="text" value={form.rt} onChange={set('rt')} className={inputCls} placeholder="001" /></Field>
                       <Field label="RW" required><input type="text" value={form.rw} onChange={set('rw')} className={inputCls} placeholder="002" /></Field>
                       <Field label="Dusun/Kampung" required><input type="text" value={form.dusun} onChange={set('dusun')} className={inputCls} placeholder="Dusun A" /></Field>
                       <Field label="Kode Pos"><input type="text" value={form.kodePos} onChange={set('kodePos')} className={inputCls} placeholder="42xxx" /></Field>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <Field label="Kelurahan" required><input type="text" value={form.kelurahan} onChange={set('kelurahan')} className={inputCls} /></Field>
                       <Field label="Kecamatan" required><input type="text" value={form.kecamatan} onChange={set('kecamatan')} className={inputCls} /></Field>
                       <Field label="Kab/Kota" required><input type="text" value={form.kabKota} onChange={set('kabKota')} className={inputCls} /></Field>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Field label="Jenis Tinggal" required><select value={form.jenisTinggal} onChange={set('jenisTinggal')} className={inputCls}><option value="">-- Pilih --</option><option value="Bersama Orangtua">Bersama Orangtua</option><option value="Bersama Wali">Bersama Wali</option><option value="Lainnya">Lainnya</option></select></Field>
                       <Field label="Transportasi" required><select value={form.alatTransportasi} onChange={set('alatTransportasi')} className={inputCls}><option value="">-- Pilih --</option><option value="Jalan Kaki">Jalan Kaki</option><option value="Motor">Sepeda Motor</option><option value="Angkutan Umum">Angkutan Umum</option><option value="Lainnya">Lainnya</option></select></Field>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <Field label="No. HP / WhatsAppAktif" required hint="Wajib untuk komunikasi"><input type="tel" value={form.hp} onChange={set('hp')} className={inputCls} placeholder="08xxx" /></Field>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Field label="No. HP / WhatsApp" required hint="Wajib untuk komunikasi"><input type="tel" value={form.hp} onChange={set('hp')} className={inputCls} placeholder="08xxx" /></Field>
                       <Field label="No. Telepon Rumah"><input type="tel" value={form.telepon} onChange={set('telepon')} className={inputCls} placeholder="Jika ada" /></Field>
                       <Field label="E-Mail Pribadi"><input type="email" value={form.email} onChange={set('email')} className={inputCls} placeholder="budi@gmail.com" /></Field>
                     </div>
@@ -453,7 +456,7 @@ const Register: React.FC = () => {
                   <div className="space-y-6">
                     <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 space-y-4">
                       <h3 className="font-bold text-sm text-[#1a2340]">Data Akademik & Fisik</h3>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Field label="No. Peserta UN/Ujian"><input type="text" value={form.noPesertaUn} onChange={set('noPesertaUn')} className={inputCls} placeholder="Nomor Ujian (Opsional)" /></Field>
                         <Field label="Jumlah Saudara Kandung"><input type="number" value={form.jumlahSaudaraKandung} onChange={set('jumlahSaudaraKandung')} className={inputCls} placeholder="Contoh: 2" /></Field>
                         <Field label="Tinggi Badan (cm)"><input type="number" value={form.tinggiBadan} onChange={set('tinggiBadan')} className={inputCls} placeholder="cm" /></Field>
@@ -501,7 +504,7 @@ const Register: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                       <FileUpload required label="Pas Foto (Wajib)" id="foto" state={pasFoto} onChange={setPasFoto} />
                       <FileUpload label="Akte Kelahiran" id="akte" state={akteLahir} onChange={setAkteLahir} />
                       <FileUpload label="Kartu Keluarga" id="kk" state={kartuKeluarga} onChange={setKartuKeluarga} />
@@ -517,12 +520,16 @@ const Register: React.FC = () => {
           </form>
 
           {/* BUTTON FOOTER */}
-          <div className="mt-8 pt-6 border-t border-gray-100 flex gap-3 justify-end z-50">
-            {step > 1 && <button type="button" onClick={goPrev} disabled={loading || !stepReady} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50 flex items-center gap-2"><ArrowLeft size={16} /> Kembali</button>}
-            {step < 4 ? (
-              <button type="button" onClick={goNext} disabled={!validateStep(step) || !stepReady} className="px-8 py-2.5 rounded-xl bg-[#1a2340] text-white text-sm font-bold hover:bg-gold-500 transition-all duration-200 disabled:opacity-40 shadow-lg shadow-gray-900/20 flex items-center gap-2">Lanjut <ArrowRight size={16} /></button>
+          <div className="mt-8 pt-4 border-t border-gray-100 flex flex-col-reverse md:flex-row gap-3 md:justify-between sticky bottom-0 bg-white/95 backdrop-blur-sm z-50 pb-[env(safe-area-inset-bottom,16px)] md:pb-0">
+            {step > 1 ? (
+              <button type="button" onClick={goPrev} disabled={loading || !stepReady} className="w-full md:w-auto justify-center px-5 py-3 md:py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50 flex items-center gap-2"><ArrowLeft size={16} /> Kembali</button>
             ) : (
-              <button type="button" onClick={handleSubmit} disabled={loading || !validateStep(4) || !stepReady} className="px-8 py-2.5 rounded-xl bg-gold-500 text-white text-sm font-bold hover:bg-gold-600 transition-all duration-200 disabled:opacity-40 shadow-lg shadow-gold-500/30 flex items-center gap-2">
+              <div className="hidden md:block"></div>
+            )}
+            {step < 4 ? (
+              <button type="button" onClick={goNext} disabled={!validateStep(step) || !stepReady} className="w-full md:w-auto justify-center px-8 py-3 md:py-2.5 rounded-xl bg-[#1a2340] text-white text-sm font-bold hover:bg-gold-500 transition-all duration-200 disabled:opacity-40 shadow-lg shadow-gray-900/20 flex items-center gap-2">Lanjut <ArrowRight size={16} /></button>
+            ) : (
+              <button type="button" onClick={handleSubmit} disabled={loading || !validateStep(4) || !stepReady} className="w-full md:w-auto justify-center px-8 py-3 md:py-2.5 rounded-xl bg-gold-500 text-white text-sm font-bold hover:bg-gold-600 transition-all duration-200 disabled:opacity-40 shadow-lg shadow-gold-500/30 flex items-center gap-2">
                 {loading ? <><Loader2 size={16} className="animate-spin" /> Proses...</> : <><CheckCircle2 size={16} /> Daftar Sekarang</>}
               </button>
             )}
