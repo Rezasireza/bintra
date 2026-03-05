@@ -4,14 +4,14 @@ import { Menu, X } from 'lucide-react';
 import Button from '../ui/Button';
 import { scrollToId } from '../../src/utils/scroll';
 
-const navLinks = [
+const navLinks: { label: string; sectionId?: string; path?: string }[] = [
   { label: 'Program', sectionId: 'program' },
-  { label: 'Pendaftaran', sectionId: 'pendaftaran' },
+  { label: 'Pendaftaran', path: '/informasi-ppdb' },
   { label: 'Biaya', sectionId: 'biaya' },
   { label: 'Fasilitas', sectionId: 'fasilitas' },
-  { label: 'Beasiswa', sectionId: 'beasiswa' },
-  { label: 'Tentang', sectionId: 'tentang' },
-  { label: 'Kontak', sectionId: 'kontak' },
+  { label: 'Beasiswa', path: '/beasiswa' },
+  { label: 'Tentang', path: '/about' },
+  { label: 'Kontak', path: '/hubungi-kami' },
 ];
 
 const Navbar: React.FC = () => {
@@ -45,8 +45,10 @@ const Navbar: React.FC = () => {
 
     const timeout = setTimeout(() => {
       navLinks.forEach(({ sectionId }) => {
-        const element = document.getElementById(sectionId);
-        if (element) observer.observe(element);
+        if (sectionId) {
+          const element = document.getElementById(sectionId);
+          if (element) observer.observe(element);
+        }
       });
     }, 100);
 
@@ -92,15 +94,26 @@ const Navbar: React.FC = () => {
         {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={`/#${link.sectionId}`}
-              onClick={(e) => handleNav(e, link.sectionId)}
-              className={`text-sm font-medium transition-colors ${activeId === link.sectionId ? 'text-gold-500' : 'text-primary-secondary hover:text-gold-500'
-                }`}
-            >
-              {link.label}
-            </a>
+            link.path ? (
+              <Link
+                key={link.label}
+                to={link.path}
+                className={`text-sm font-medium transition-colors ${location.pathname === link.path ? 'text-gold-500' : 'text-primary-secondary hover:text-gold-500'
+                  }`}
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                key={link.label}
+                href={`/#${link.sectionId}`}
+                onClick={(e) => handleNav(e, link.sectionId!)}
+                className={`text-sm font-medium transition-colors ${activeId === link.sectionId ? 'text-gold-500' : 'text-primary-secondary hover:text-gold-500'
+                  }`}
+              >
+                {link.label}
+              </a>
+            )
           ))}
         </div>
 
@@ -128,15 +141,27 @@ const Navbar: React.FC = () => {
       {isOpen && (
         <div className="lg:hidden absolute top-[72px] left-0 right-0 bg-white border-b border-gray-100 shadow-xl p-6 flex flex-col gap-4 animate-in slide-in-from-top-4 duration-200">
           {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={`/#${link.sectionId}`}
-              onClick={(e) => handleNav(e, link.sectionId)}
-              className={`text-base font-medium py-2 border-b border-gray-50 ${activeId === link.sectionId ? 'text-gold-500' : 'text-primary-DEFAULT'
-                }`}
-            >
-              {link.label}
-            </a>
+            link.path ? (
+              <Link
+                key={link.label}
+                to={link.path}
+                onClick={() => setIsOpen(false)}
+                className={`text-base font-medium py-2 border-b border-gray-50 ${location.pathname === link.path ? 'text-gold-500' : 'text-primary-DEFAULT'
+                  }`}
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                key={link.label}
+                href={`/#${link.sectionId}`}
+                onClick={(e) => handleNav(e, link.sectionId!)}
+                className={`text-base font-medium py-2 border-b border-gray-50 ${activeId === link.sectionId ? 'text-gold-500' : 'text-primary-DEFAULT'
+                  }`}
+              >
+                {link.label}
+              </a>
+            )
           ))}
           <div className="flex flex-col gap-3 mt-4">
             <Link to="/login" className="w-full">
